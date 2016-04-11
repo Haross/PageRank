@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane id="AnchorPane" prefHeight="641.0" prefWidth="1077.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8.0.65" fx:controller="esd.pagerank.FXMLDocumentController">
+   <children>
+      <ScrollPane fx:id="scrollPaneM" layoutX="54.0" layoutY="74.0" prefHeight="279.0" prefWidth="326.0" />
+   </children>
+</AnchorPane>
