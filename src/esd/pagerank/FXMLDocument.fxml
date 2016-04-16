@@ -6,8 +6,14 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane id="AnchorPane" prefHeight="641.0" prefWidth="1077.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8.0.65" fx:controller="esd.pagerank.FXMLDocumentController">
+<AnchorPane id="AnchorPane" prefHeight="529.0" prefWidth="732.0" xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1" fx:controller="esd.pagerank.FXMLDocumentController">
    <children>
-      <ScrollPane fx:id="scrollPaneM" layoutX="54.0" layoutY="74.0" prefHeight="279.0" prefWidth="326.0" />
+      <ScrollPane fx:id="scrollPaneM" layoutX="39.0" layoutY="74.0" prefHeight="424.0" prefWidth="417.0" style="-fx-background-color: transparent;" />
+      <TableView fx:id="tablaPR" layoutX="465.0" layoutY="86.0" prefHeight="400.0" prefWidth="242.0">
+        <columns>
+          <TableColumn fx:id="columnWeb" prefWidth="75.0" text="Página" />
+          <TableColumn fx:id="columnPR" prefWidth="75.0" text="PR" />
+        </columns>
+      </TableView>
    </children>
 </AnchorPane>

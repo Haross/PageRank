@@ -8,9 +8,12 @@ package esd.pagerank;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -18,6 +21,8 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
@@ -32,7 +37,10 @@ public class FXMLDocumentController implements Initializable {
     
     @FXML
     private ScrollPane scrollPaneM;
-    
+    @FXML TableView<TablaRangos> tablaPR;
+    @FXML TableColumn<TablaRangos,String> columnPR, columnWeb;
+    private ObservableList<TablaRangos> lista = FXCollections.observableArrayList();
+
     GridPane matrizM =  new GridPane();
     ArrayList<String> info = new ArrayList();
      ArrayList<Integer> sumasM = new ArrayList();
@@ -121,6 +129,8 @@ public class FXMLDocumentController implements Initializable {
     }
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        columnPR.setCellValueFactory(cellData -> cellData.getValue().prProperty());
+        columnWeb.setCellValueFactory(cellData -> cellData.getValue().webProperty());
         try {
             getFiles();
         } catch (IOException ex) {
@@ -141,9 +151,25 @@ public class FXMLDocumentController implements Initializable {
             String[] split = info.get(i).split(":");
             String[] split1 = split[0].split("@PR@");
             System.out.println("Pagina: "+split1[0]+ " PR: "+split1[1]);
+            TablaRangos t = new TablaRangos();
+            t.setPR(split1[1]);
+            t.setWeb(split1[0]);
+            lista.add(t);
         }
-      
+        Collections.sort(lista, comparator);
+       tablaPR.setItems(lista);
+       
     }
+    Comparator<TablaRangos> comparator = new Comparator<TablaRangos>() {
+     
+
+        @Override
+        public int compare(TablaRangos o1, TablaRangos o2) {
+            double a = Double.parseDouble(o1.getPR());
+            double b = Double.parseDouble(o2.getPR());
+            return (int) (a-b); 
+        }
+    };
     public void startPR(){
         for (int i = 0; i < 50; i++) {
             for (int j = 0; j < info.size(); j++) {
