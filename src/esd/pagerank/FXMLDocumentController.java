@@ -91,8 +91,8 @@ public class FXMLDocumentController implements Initializable {
             
             matrizM.getRowConstraints().add(con);
             String[] aux = info.get(i).split(":");
-            
-            matrizM.add(new Label(aux[0]),  0, i+1);
+             String[] split = aux[0].split("@PR@");
+            matrizM.add(new Label(split[0]),  0, i+1);
             
         }
          
@@ -107,7 +107,8 @@ public class FXMLDocumentController implements Initializable {
             column = new ColumnConstraints(100);
             matrizM.getColumnConstraints().add(column);
             String[] aux = info.get(i).split(":");
-            matrizM.add(new Label(aux[0]), i+1, 0);
+             String[] split = aux[0].split("@PR@");
+            matrizM.add(new Label(split[0]), i+1, 0);
         }
     }
     
@@ -126,6 +127,8 @@ public class FXMLDocumentController implements Initializable {
             Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
         }
         setMatrizM();
+       startPR();
+       imprimirPr();
     }   
     
     public void getFiles() throws IOException{
@@ -133,5 +136,101 @@ public class FXMLDocumentController implements Initializable {
         info =  a.matrizM();
         
     }
+    public void imprimirPr(){
+        for (int i = 0; i < info.size(); i++) {
+            String[] split = info.get(i).split(":");
+            String[] split1 = split[0].split("@PR@");
+            System.out.println("Pagina: "+split1[0]+ " PR: "+split1[1]);
+        }
+      
+    }
+    public void startPR(){
+        for (int i = 0; i < 50; i++) {
+            for (int j = 0; j < info.size(); j++) {
+               
+                String[] split = info.get(j).split(":");
+                String[] split1 = split[0].split("@PR@");
+                double pr = pageRankFunction(split1[0]);
+                System.out.println("PR: "+pr +" : "+ split1[0]);
+                String cadena = split1[0]+"@PR@"+pr;
+                
+                for (int k = 1; k < split.length; k++) {
+                    cadena += ":"+split[k]; 
+                }
+                info.add(j, cadena);
+                System.out.println("cadena: "+cadena);
+                int aux =  j+1;
+                info.remove(aux);
+            }
+        }
+    }
     
+    //(nombredelArchivo:nombredelinks:numero),(nombredelArchivo:nombredelinks:numero)
+    public double pageRankFunction(String pagina){
+        double d = 0.5;
+        double aux = (1-d);
+        double aux2  = 0;
+        for (int i = 0; i < info.size(); i++) {
+            String[] split = info.get(i).split(":");
+             String[] split1 = split[0].split("@PR@");
+            for (int j = 1; j < split.length; j++) {
+                if(!split1[0].equals(pagina)){ //descarta enlaces de la misma página
+                    System.out.println("pagina: "+split1[0]);
+                    if(j%2 != 0 && split[j].equals(pagina)){
+                        j++;
+                        System.out.println("pagina2: "+split[j-1]);
+                       // aux2 =  aux2 + getPR(split[j-1]);
+                        aux2 =  aux2 + getPR(split1[0]);
+                        
+                    }
+                }
+                System.out.println("-------");
+                
+            }
+        }
+        double suma = aux + d*aux2;  
+        if(pagina.equals("3.html"))
+            System.out.println("aux= "+aux+"+ "+d+"*"+aux2+"="+ suma);
+        return suma;
+    }
+    
+    public double getPR(String pagina){
+        System.out.println("**PR**: "+pagina);
+        double c2 = c(pagina);
+        if(c2 > 1){
+            System.out.println(getPRofPage(pagina)/c2);
+            return getPRofPage(pagina)/c2;
+        }
+        System.out.println(getPRofPage(pagina));
+        return  getPRofPage(pagina);
+    }
+    
+    public double getPRofPage(String pagina){
+        for (int i = 0; i < info.size(); i++) {
+            String[] split = info.get(i).split(":");
+            String[] split1 = split[0].split("@PR@");
+            if(split1[0].equals(pagina)){
+                return Double.parseDouble(split1[1]);
+            }
+        }
+        return 1;
+    }
+    
+    public double c(String pagina){
+        double aux  = 0;
+        for (int i = 0; i < info.size(); i++) {
+            String[] split = info.get(i).split(":");
+            String[] split1 = split[0].split("@PR@");
+            for (int j = 1; j < split.length; j++) {
+                if(split1[0].equals(pagina)){
+                    if(j%2 != 0){
+                        j++;
+                        aux = aux + Integer.parseInt(split[j]);
+                    }
+                }
+            }
+        }
+        System.out.println("C:"+aux);
+        return aux;
+    }
 }

@@ -36,7 +36,7 @@ public class PageRank {
                 System.out.println(ficheros[x]);
                 String archivo = "C:\\Users\\Javier\\Documents\\NetBeansProjects\\Sistemas Operativos\\ESD-PageRank\\prueba\\" + ficheros[x];
                 String cadena;
-                info.add(ficheros[x]);
+                info.add(ficheros[x]+"@PR@1");
                 FileReader f = new FileReader(archivo);
                 BufferedReader b = new BufferedReader(f);
                 ArrayList<String> contadores = new ArrayList();
@@ -60,8 +60,13 @@ public class PageRank {
                                     if (!ficheros[x].equals(aux[0])) {
                                         contaC++;
                                     }
-                                    contadores.add(i, aux2[0] + ":" + contaC);
-                                    int auxiliar = i + 1;
+                                    //contadores.add(i, aux2[0] + ":" + contaC); Para que cuente los links
+                                    if(contaC > 1){ //**
+                                        contadores.add(i, aux2[0] + ":1"); //Solo aparecerá con un 1
+                                    }else{
+                                     contadores.add(i, aux2[0] + ":" + contaC); //Solo aparecerá con un 1 de referencia   
+                                    }
+                                     int auxiliar = i + 1;
                                     contadores.remove(auxiliar);
                                     bandera = false;
                                 }
